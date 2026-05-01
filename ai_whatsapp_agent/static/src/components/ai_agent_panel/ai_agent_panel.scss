@@ -1,0 +1,98 @@
+.o_ai_agent_panel {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin: 8px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.o_ai_agent_header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    user-select: none;
+
+    &:hover {
+        background: #e9ecef;
+    }
+}
+
+.o_ai_agent_icon {
+    font-size: 1.1rem;
+}
+
+.o_ai_agent_title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    flex: 1;
+    color: #343a40;
+}
+
+.o_ai_chevron {
+    color: #6c757d;
+    font-size: 0.65rem;
+}
+
+.o_ai_status_badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+
+    &.o_ai_status_active {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    &.o_ai_status_paused {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    &.o_ai_status_disabled {
+        background: #e2e3e5;
+        color: #383d41;
+    }
+}
+
+.o_ai_agent_body {
+    padding: 10px 12px;
+}
+
+.o_ai_hint {
+    font-size: 0.82rem;
+    margin-bottom: 8px;
+}
+
+.o_ai_paused_info {
+    font-size: 0.78rem;
+    margin-bottom: 8px;
+}
+
+.o_ai_btn {
+    width: 100%;
+    margin-bottom: 4px;
+    font-size: 0.82rem;
+}
+
+.o_ai_divider {
+    border-top: 1px solid #e9ecef;
+    margin: 8px 0;
+}
+
+.o_ai_btn_disable {
+    font-size: 0.75rem;
+    padding: 2px 0;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <!--
+        Extensión del template mail.ChannelHeader (Odoo 17/18/19).
+        Inyecta el AIAgentPanel debajo del header cuando el canal es WhatsApp.
+
+        Si el t-name no coincide con el nombre real en la versión instalada,
+        Odoo ignora silenciosamente esta extensión (sin error fatal).
+    -->
+    <t t-name="mail.ChannelHeader" t-inherit="mail.ChannelHeader" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_ChannelHeader')]" position="after">
+            <t t-if="isWhatsAppChannel and whatsAppChannelId">
+                <AIAgentPanel channelId="whatsAppChannelId"/>
+            </t>
+        </xpath>
+    </t>
+
+    <!-- Intento alternativo con nombre de componente diferente en versiones distintas -->
+    <t t-name="discuss.ChannelHeader" t-inherit="discuss.ChannelHeader" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_ChannelHeader')]" position="after">
+            <t t-if="isWhatsAppChannel and whatsAppChannelId">
+                <AIAgentPanel channelId="whatsAppChannelId"/>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

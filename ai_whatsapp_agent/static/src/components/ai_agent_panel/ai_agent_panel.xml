@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="ai_whatsapp_agent.AIAgentPanel" owl="1">
+        <div class="o_ai_agent_panel">
+
+            <!-- Header colapsable -->
+            <div class="o_ai_agent_header" t-on-click="toggleExpanded">
+                <span class="o_ai_agent_icon">🤖</span>
+                <span class="o_ai_agent_title">Agente IA</span>
+                <span t-att-class="'o_ai_status_badge ' + statusClass">
+                    <t t-esc="statusLabel"/>
+                </span>
+                <span class="o_ai_chevron">
+                    <t t-if="state.expanded">▲</t>
+                    <t t-else="">▼</t>
+                </span>
+            </div>
+
+            <!-- Panel expandido -->
+            <div t-if="state.expanded" class="o_ai_agent_body">
+
+                <!-- Estado: IA deshabilitada -->
+                <t t-if="!state.enabled">
+                    <p class="o_ai_hint text-muted">
+                        El agente IA no está habilitado en este canal de WhatsApp.
+                    </p>
+                    <button class="btn btn-sm btn-primary o_ai_btn"
+                            t-on-click="onClickEnable"
+                            t-att-disabled="state.loading">
+                        <t t-if="state.loading">Cargando...</t>
+                        <t t-else="">Habilitar Agente IA</t>
+                    </button>
+                </t>
+
+                <!-- Estado: IA habilitada -->
+                <t t-if="state.enabled">
+
+                    <!-- IA activa -->
+                    <t t-if="state.active">
+                        <p class="o_ai_hint text-success">
+                            ✅ La IA está respondiendo automáticamente.
+                        </p>
+                        <button class="btn btn-sm btn-warning o_ai_btn"
+                                t-on-click="onClickPause"
+                                t-att-disabled="state.loading">
+                            <t t-if="state.loading">Procesando...</t>
+                            <t t-else="">⏸ Pausar IA (atender yo)</t>
+                        </button>
+                    </t>
+
+                    <!-- IA pausada -->
+                    <t t-if="!state.active">
+                        <p class="o_ai_hint text-warning">
+                            ⏸ Agente IA pausado. Atención manual activa.
+                        </p>
+                        <p t-if="pausedInfo" class="o_ai_paused_info text-muted">
+                            <t t-esc="pausedInfo"/>
+                        </p>
+                        <p t-if="state.timeout" class="o_ai_hint text-muted">
+                            La IA se reactivará automáticamente tras
+                            <strong><t t-esc="state.timeout"/> min</strong> de inactividad.
+                        </p>
+                        <button class="btn btn-sm btn-success o_ai_btn"
+                                t-on-click="onClickResume"
+                                t-att-disabled="state.loading">
+                            <t t-if="state.loading">Procesando...</t>
+                            <t t-else="">▶ Reactivar IA</t>
+                        </button>
+                    </t>
+
+                    <div class="o_ai_divider"/>
+
+                    <button class="btn btn-sm btn-link text-danger o_ai_btn_disable"
+                            t-on-click="onClickDisable"
+                            t-att-disabled="state.loading">
+                        Deshabilitar agente IA
+                    </button>
+                </t>
+
+            </div>
+        </div>
+    </t>
+
+</templates>
