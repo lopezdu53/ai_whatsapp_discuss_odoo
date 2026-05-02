@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Acción standalone para la configuración del Agente IA WhatsApp -->
-    <record id="action_ai_whatsapp_config" model="ir.actions.act_window">
-        <field name="name">Configuración Agente IA WhatsApp</field>
-        <field name="res_model">res.config.settings</field>
-        <field name="view_mode">form</field>
-        <field name="target">current</field>
-    </record>
-
-    <!-- Vista de configuración standalone (sin heredar de base_setup) -->
+    <!-- Vista de configuración standalone del Agente IA WhatsApp -->
     <record id="view_ai_whatsapp_config_form" model="ir.ui.view">
         <field name="name">ai.whatsapp.config.settings.form</field>
         <field name="model">res.config.settings</field>
@@ -66,12 +58,12 @@
         </field>
     </record>
 
-    <!-- Actualizar la acción para usar nuestra vista -->
+    <!-- Acción para abrir la configuración del Agente IA WhatsApp -->
     <record id="action_ai_whatsapp_config" model="ir.actions.act_window">
         <field name="name">Configuración Agente IA WhatsApp</field>
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
-        <field name="target">inline</field>
+        <field name="target">current</field>
         <field name="view_id" ref="view_ai_whatsapp_config_form"/>
     </record>
 
