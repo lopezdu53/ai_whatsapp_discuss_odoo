@@ -1,78 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Hereda la vista form del canal de Discuss para añadir pestaña IA -->
-    <record id="view_discuss_channel_form_ai_agent" model="ir.ui.view">
-        <field name="name">discuss.channel.form.ai.agent</field>
-        <field name="model">discuss.channel</field>
-        <field name="inherit_id" model="ir.ui.view" search="[('model', '=', 'discuss.channel'), ('type', '=', 'form'), ('mode', '=', 'primary')]"/>
-        <field name="arch" type="xml">
-            <notebook position="inside">
-                <page string="Agente IA" name="ai_agent_page"
-                      attrs="{'invisible': [('channel_type', '!=', 'whatsapp')]}">
-                    <group>
-                        <group string="Estado del agente">
-                            <field name="ai_agent_enabled" widget="boolean_toggle"/>
-                            <field name="ai_agent_active" readonly="1"
-                                   attrs="{'invisible': [('ai_agent_enabled', '=', False)]}"/>
-                            <field name="ai_agent_paused_by" readonly="1"
-                                   attrs="{'invisible': [('ai_agent_paused_by', '=', False)]}"/>
-                            <field name="ai_agent_paused_at" readonly="1"
-                                   attrs="{'invisible': [('ai_agent_paused_at', '=', False)]}"/>
-                            <field name="last_human_message_at" readonly="1"
-                                   attrs="{'invisible': [('last_human_message_at', '=', False)]}"/>
-                        </group>
-                        <group string="Configuración">
-                            <field name="human_inactivity_timeout"/>
-                            <field name="ai_system_prompt" widget="text"
-                                   placeholder="Deja vacío para usar el prompt global de los ajustes"/>
-                        </group>
-                    </group>
-
-                    <!-- Botones de acción -->
-                    <div class="o_row mt-3"
-                         attrs="{'invisible': [('ai_agent_enabled', '=', False)]}">
-                        <button name="action_pause_ai_agent"
-                                string="Pausar IA (atender humano)"
-                                type="object"
-                                class="btn btn-warning"
-                                attrs="{'invisible': [('ai_agent_active', '=', False)]}"/>
-                        <button name="action_resume_ai_agent"
-                                string="Reactivar IA"
-                                type="object"
-                                class="btn btn-success"
-                                attrs="{'invisible': [('ai_agent_active', '=', True)]}"/>
-                    </div>
-                    <div class="o_row mt-2"
-                         attrs="{'invisible': [('ai_agent_enabled', '=', False)]}">
-                        <button name="action_disable_ai_agent"
-                                string="Deshabilitar agente IA"
-                                type="object"
-                                class="btn btn-danger btn-sm"/>
-                    </div>
-                    <div class="o_row mt-2"
-                         attrs="{'invisible': [('ai_agent_enabled', '=', True)]}">
-                        <button name="action_enable_ai_agent"
-                                string="Habilitar agente IA"
-                                type="object"
-                                class="btn btn-primary"/>
-                    </div>
-
-                    <div class="alert alert-info mt-3"
-                         attrs="{'invisible': [('ai_agent_enabled', '=', True)]}">
-                        <p>
-                            <strong>¿Cómo funciona el Agente IA?</strong><br/>
-                            Al habilitar el agente IA, responderá automáticamente los mensajes entrantes
-                            de WhatsApp. Los agentes humanos pueden pausarlo en cualquier momento.
-                            Tras el tiempo de inactividad configurado, la IA se reactivará sola.
-                        </p>
-                    </div>
-                </page>
-            </notebook>
-        </field>
-    </record>
-
-    <!-- Vista de lista para gestionar canales WhatsApp con IA -->
+    <!-- ============================================================
+         Vista de lista: canales WhatsApp con estado del agente IA
+         ============================================================ -->
     <record id="view_whatsapp_channel_ai_list" model="ir.ui.view">
         <field name="name">discuss.channel.whatsapp.ai.list</field>
         <field name="model">discuss.channel</field>
@@ -83,45 +14,134 @@
                 <field name="ai_agent_active" string="IA activa"/>
                 <field name="ai_agent_paused_by" string="Pausado por" optional="show"/>
                 <field name="ai_agent_paused_at" string="Pausado en" optional="show"/>
-                <field name="last_human_message_at" string="Último mensaje humano" optional="show"/>
+                <field name="last_human_message_at" string="Últ. msg humano" optional="show"/>
                 <field name="human_inactivity_timeout" string="Timeout (min)" optional="show"/>
                 <button name="action_pause_ai_agent"
                         string="Pausar IA"
                         type="object"
                         icon="fa-pause"
-                        attrs="{'invisible': [('ai_agent_active', '=', False)]}"/>
+                        invisible="not ai_agent_active"/>
                 <button name="action_resume_ai_agent"
                         string="Reactivar IA"
                         type="object"
                         icon="fa-play"
-                        attrs="{'invisible': [('ai_agent_active', '=', True)]}"/>
+                        invisible="ai_agent_active"/>
             </list>
         </field>
     </record>
 
-    <!-- Acción para abrir la lista de canales WhatsApp con IA -->
+    <!-- ============================================================
+         Vista de formulario standalone (sin heredar de ningún view)
+         ============================================================ -->
+    <record id="view_whatsapp_channel_ai_form" model="ir.ui.view">
+        <field name="name">discuss.channel.whatsapp.ai.form</field>
+        <field name="model">discuss.channel</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <form string="Agente IA – Canal WhatsApp">
+                <header>
+                    <button name="action_enable_ai_agent"
+                            string="Habilitar Agente IA"
+                            type="object"
+                            class="btn-primary"
+                            invisible="ai_agent_enabled"/>
+                    <button name="action_pause_ai_agent"
+                            string="⏸  Pausar IA (atender yo)"
+                            type="object"
+                            class="btn-warning"
+                            invisible="not ai_agent_enabled or not ai_agent_active"/>
+                    <button name="action_resume_ai_agent"
+                            string="▶  Reactivar IA"
+                            type="object"
+                            class="btn-success"
+                            invisible="not ai_agent_enabled or ai_agent_active"/>
+                    <button name="action_disable_ai_agent"
+                            string="Deshabilitar IA"
+                            type="object"
+                            class="btn-danger"
+                            invisible="not ai_agent_enabled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Estado del agente">
+                            <field name="ai_agent_enabled" widget="boolean_toggle"/>
+                            <field name="ai_agent_active" readonly="1"
+                                   invisible="not ai_agent_enabled"/>
+                            <field name="ai_agent_paused_by" readonly="1"
+                                   invisible="not ai_agent_paused_by"/>
+                            <field name="ai_agent_paused_at" readonly="1"
+                                   invisible="not ai_agent_paused_at"/>
+                            <field name="last_human_message_at" readonly="1"
+                                   invisible="not last_human_message_at"/>
+                        </group>
+                        <group string="Configuración de reactivación">
+                            <field name="human_inactivity_timeout"
+                                   help="0 = usar el valor global de Ajustes"/>
+                        </group>
+                    </group>
+
+                    <group string="Prompt personalizado para este canal">
+                        <field name="ai_system_prompt"
+                               widget="text"
+                               nolabel="1"
+                               placeholder="Deja vacío para usar el prompt global configurado en Ajustes."/>
+                    </group>
+
+                    <div class="alert alert-info" invisible="ai_agent_enabled">
+                        <strong>Agente IA deshabilitado.</strong>
+                        Pulsa <em>Habilitar Agente IA</em> para que la IA
+                        responda automáticamente los mensajes entrantes de WhatsApp en este canal.
+                    </div>
+                    <div class="alert alert-success" invisible="not ai_agent_enabled or not ai_agent_active">
+                        ✅ <strong>Agente IA activo.</strong>
+                        Respondiendo automáticamente. Pulsa <em>Pausar IA</em> para tomar el control.
+                    </div>
+                    <div class="alert alert-warning" invisible="not ai_agent_enabled or ai_agent_active">
+                        ⏸ <strong>Agente IA pausado.</strong>
+                        Un agente humano está atendiendo la conversación.
+                        Se reactivará automáticamente tras el tiempo de inactividad configurado.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         Acción para abrir canales WhatsApp con configuración IA
+         ============================================================ -->
     <record id="action_whatsapp_ai_channels" model="ir.actions.act_window">
         <field name="name">Canales WhatsApp – Agente IA</field>
         <field name="res_model">discuss.channel</field>
         <field name="view_mode">list,form</field>
         <field name="domain">[('channel_type', '=', 'whatsapp')]</field>
-        <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'list', 'view_id': ref('view_whatsapp_channel_ai_list')}),
-            (0, 0, {'view_mode': 'form'})]"/>
         <field name="context">{'default_channel_type': 'whatsapp'}</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_whatsapp_channel_ai_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_whatsapp_channel_ai_form')}),
+        ]"/>
     </record>
 
-    <!-- Ítem de menú bajo WhatsApp o Discuss -->
+    <!-- ============================================================
+         Menú bajo Settings > Técnico (base.menu_administration
+         existe en todas las instalaciones de Odoo)
+         ============================================================ -->
     <menuitem
-        id="menu_whatsapp_ai_agent_root"
+        id="menu_ai_whatsapp_agent_root"
         name="Agente IA WhatsApp"
-        parent="whatsapp.menu_whatsapp_root"
-        sequence="90"/>
+        parent="base.menu_administration"
+        sequence="50"
+        groups="base.group_system"/>
 
     <menuitem
-        id="menu_whatsapp_ai_channels"
-        name="Canales con Agente IA"
-        parent="menu_whatsapp_ai_agent_root"
+        id="menu_ai_whatsapp_channels"
+        name="Canales WhatsApp"
+        parent="menu_ai_whatsapp_agent_root"
         action="action_whatsapp_ai_channels"
         sequence="10"/>
 

@@ -1,144 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="res_config_settings_view_ai_whatsapp" model="ir.ui.view">
-        <field name="name">res.config.settings.view.ai.whatsapp</field>
+    <!-- Acción standalone para la configuración del Agente IA WhatsApp -->
+    <record id="action_ai_whatsapp_config" model="ir.actions.act_window">
+        <field name="name">Configuración Agente IA WhatsApp</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'ai_whatsapp_agent'}</field>
+    </record>
+
+    <!-- Vista de configuración standalone (sin heredar de base_setup) -->
+    <record id="view_ai_whatsapp_config_form" model="ir.ui.view">
+        <field name="name">ai.whatsapp.config.settings.form</field>
         <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="base_setup.action_general_configuration"/>
+        <field name="priority">100</field>
         <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('settings')]" position="inside">
-                <div class="app_settings_block" data-string="Agente IA WhatsApp"
-                     data-key="ai_whatsapp_agent" string="Agente IA WhatsApp">
-
+            <form string="Configuración – Agente IA WhatsApp" class="oe_form_configuration">
+                <header>
+                    <button string="Guardar" type="object" name="execute"
+                            class="btn-primary"/>
+                    <button string="Descartar" type="object" name="cancel"
+                            class="btn-secondary" special="cancel"/>
+                </header>
+                <sheet>
                     <h2>Agente IA para WhatsApp</h2>
+                    <p class="text-muted">
+                        Configura el proveedor de inteligencia artificial que responderá
+                        los mensajes de WhatsApp automáticamente.
+                    </p>
 
-                    <div class="row mt-4">
-                        <div class="col-12 col-lg-6">
-                            <div class="o_setting_box">
-                                <div class="o_setting_left_pane"/>
-                                <div class="o_setting_right_pane">
-                                    <span class="o_form_label">Proveedor de IA</span>
-                                    <div class="text-muted">
-                                        Selecciona el proveedor de inteligencia artificial que procesará las conversaciones.
-                                    </div>
-                                    <div class="content-group mt-2">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <field name="ai_whatsapp_provider" widget="radio"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <group string="Proveedor de IA">
+                        <field name="ai_whatsapp_provider" widget="radio"/>
+                        <field name="ai_whatsapp_api_key"
+                               password="True"
+                               placeholder="OpenAI: sk-...   |   Anthropic: sk-ant-..."/>
+                        <field name="ai_whatsapp_model"
+                               placeholder="OpenAI: gpt-4o   |   Anthropic: claude-sonnet-4-6"/>
+                    </group>
 
-                        <div class="col-12 col-lg-6">
-                            <div class="o_setting_box">
-                                <div class="o_setting_left_pane"/>
-                                <div class="o_setting_right_pane">
-                                    <span class="o_form_label">API Key</span>
-                                    <div class="text-muted">
-                                        Clave secreta de OpenAI o Anthropic. Se guarda cifrada.
-                                    </div>
-                                    <div class="content-group mt-2">
-                                        <field name="ai_whatsapp_api_key"
-                                               password="True"
-                                               placeholder="sk-... / sk-ant-..."/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <group string="Parámetros de generación">
+                        <field name="ai_whatsapp_max_tokens"/>
+                        <field name="ai_whatsapp_temperature"/>
+                    </group>
+
+                    <group string="Comportamiento">
+                        <field name="ai_whatsapp_default_timeout"
+                               help="Minutos sin respuesta del agente humano para reactivar la IA. 0 = desactivar reactivación automática."/>
+                    </group>
+
+                    <group string="Prompt del sistema (global)">
+                        <field name="ai_whatsapp_default_system_prompt"
+                               widget="text"
+                               nolabel="1"
+                               style="min-height:120px"
+                               placeholder="Eres un asistente de atención al cliente amable y conciso. Responde siempre en el idioma del cliente."/>
+                    </group>
+
+                    <div class="alert alert-info">
+                        <strong>Modelos recomendados:</strong><br/>
+                        • OpenAI: <code>gpt-4o</code>, <code>gpt-4o-mini</code><br/>
+                        • Anthropic: <code>claude-sonnet-4-6</code>, <code>claude-haiku-4-5-20251001</code>
                     </div>
-
-                    <div class="row mt-4">
-                        <div class="col-12 col-lg-6">
-                            <div class="o_setting_box">
-                                <div class="o_setting_left_pane"/>
-                                <div class="o_setting_right_pane">
-                                    <span class="o_form_label">Modelo de IA</span>
-                                    <div class="text-muted">
-                                        OpenAI: <code>gpt-4o</code>, <code>gpt-4-turbo</code> |
-                                        Anthropic: <code>claude-sonnet-4-6</code>, <code>claude-opus-4-7</code>
-                                    </div>
-                                    <div class="content-group mt-2">
-                                        <field name="ai_whatsapp_model" placeholder="gpt-4o"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-lg-6">
-                            <div class="o_setting_box">
-                                <div class="o_setting_left_pane"/>
-                                <div class="o_setting_right_pane">
-                                    <span class="o_form_label">Inactividad humana (minutos)</span>
-                                    <div class="text-muted">
-                                        Tiempo sin respuesta del agente humano para reactivar la IA automáticamente.
-                                        0 = no reactivar.
-                                    </div>
-                                    <div class="content-group mt-2">
-                                        <field name="ai_whatsapp_default_timeout"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-12 col-lg-6">
-                            <div class="o_setting_box">
-                                <div class="o_setting_left_pane"/>
-                                <div class="o_setting_right_pane">
-                                    <span class="o_form_label">Tokens máximos</span>
-                                    <div class="text-muted">
-                                        Longitud máxima de cada respuesta generada (tokens ≈ palabras).
-                                    </div>
-                                    <div class="content-group mt-2">
-                                        <field name="ai_whatsapp_max_tokens"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-lg-6">
-                            <div class="o_setting_box">
-                                <div class="o_setting_left_pane"/>
-                                <div class="o_setting_right_pane">
-                                    <span class="o_form_label">Temperatura (0.0 – 1.0)</span>
-                                    <div class="text-muted">
-                                        0.0 = respuestas exactas y deterministas. 1.0 = mayor creatividad.
-                                    </div>
-                                    <div class="content-group mt-2">
-                                        <field name="ai_whatsapp_temperature"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <div class="o_setting_box">
-                                <div class="o_setting_left_pane"/>
-                                <div class="o_setting_right_pane">
-                                    <span class="o_form_label">Prompt del sistema (global)</span>
-                                    <div class="text-muted">
-                                        Instrucciones base para la IA. Cada canal puede sobreescribirlo.
-                                    </div>
-                                    <div class="content-group mt-2">
-                                        <field name="ai_whatsapp_default_system_prompt"
-                                               widget="text"
-                                               style="min-height: 100px;"
-                                               placeholder="Eres un asistente de atención al cliente amable y conciso..."/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </xpath>
+                </sheet>
+            </form>
         </field>
     </record>
+
+    <!-- Actualizar la acción para usar nuestra vista -->
+    <record id="action_ai_whatsapp_config" model="ir.actions.act_window">
+        <field name="name">Configuración Agente IA WhatsApp</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="view_id" ref="view_ai_whatsapp_config_form"/>
+    </record>
+
+    <!-- Menú de Configuración bajo Ajustes > Técnico -->
+    <menuitem
+        id="menu_ai_whatsapp_config"
+        name="Configuración IA"
+        parent="menu_ai_whatsapp_agent_root"
+        action="action_ai_whatsapp_config"
+        sequence="20"
+        groups="base.group_system"/>
 
 </odoo>
