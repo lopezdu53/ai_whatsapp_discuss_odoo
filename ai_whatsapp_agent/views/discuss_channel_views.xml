@@ -5,7 +5,7 @@
     <record id="view_discuss_channel_form_ai_agent" model="ir.ui.view">
         <field name="name">discuss.channel.form.ai.agent</field>
         <field name="model">discuss.channel</field>
-        <field name="inherit_id" ref="discuss.view_discuss_channel_form"/>
+        <field name="inherit_id" model="ir.ui.view" search="[('model', '=', 'discuss.channel'), ('type', '=', 'form'), ('mode', '=', 'primary')]"/>
         <field name="arch" type="xml">
             <notebook position="inside">
                 <page string="Agente IA" name="ai_agent_page"
@@ -107,7 +107,7 @@
         <field name="domain">[('channel_type', '=', 'whatsapp')]</field>
         <field name="view_ids" eval="[(5, 0, 0),
             (0, 0, {'view_mode': 'list', 'view_id': ref('view_whatsapp_channel_ai_list')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('discuss.view_discuss_channel_form')})]"/>
+            (0, 0, {'view_mode': 'form'})]"/>
         <field name="context">{'default_channel_type': 'whatsapp'}</field>
     </record>
 

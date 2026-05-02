@@ -15,7 +15,7 @@
         - Prompt del sistema configurable por canal y globalmente
     """,
     'author': 'Custom',
-    'depends': ['mail', 'whatsapp', 'discuss'],
+    'depends': ['mail', 'whatsapp'],
     'data': [
         'security/ir.model.access.csv',
         'data/ir_cron_data.xml',

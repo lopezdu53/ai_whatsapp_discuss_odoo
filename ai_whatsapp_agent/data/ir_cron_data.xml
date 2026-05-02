@@ -3,7 +3,7 @@
     <data noupdate="1">
         <record id="ir_cron_resume_ai_after_inactivity" model="ir.cron">
             <field name="name">Agente IA WhatsApp: Reactivar por inactividad humana</field>
-            <field name="model_id" ref="discuss.model_discuss_channel"/>
+            <field name="model_id" model="ir.model" search="[('model', '=', 'discuss.channel')]"/>
             <field name="state">code</field>
             <field name="code">model._cron_resume_ai_after_inactivity()</field>
             <field name="interval_number">5</field>
