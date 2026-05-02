@@ -35,7 +35,7 @@ class ResConfigSettings(models.TransientModel):
         config_parameter='ai_whatsapp_agent.temperature',
         help='0.0 = respuestas deterministas, 1.0 = máxima creatividad',
     )
-    ai_whatsapp_default_system_prompt = fields.Text(
+    ai_whatsapp_default_system_prompt = fields.Char(
         string='Prompt del sistema (global)',
         config_parameter='ai_whatsapp_agent.default_system_prompt',
         help='Instrucciones base para la IA en todos los canales WhatsApp. '

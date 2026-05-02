@@ -42,9 +42,7 @@
 
                     <group string="Prompt del sistema (global)">
                         <field name="ai_whatsapp_default_system_prompt"
-                               widget="text"
                                nolabel="1"
-                               style="min-height:120px"
                                placeholder="Eres un asistente de atención al cliente amable y conciso. Responde siempre en el idioma del cliente."/>
                     </group>
 
