@@ -22,15 +22,6 @@
         'views/discuss_channel_views.xml',
         'views/res_config_settings_views.xml',
     ],
-    'assets': {
-        'web.assets_backend': [
-            'ai_whatsapp_agent/static/src/components/ai_agent_panel/ai_agent_panel.js',
-            'ai_whatsapp_agent/static/src/components/ai_agent_panel/ai_agent_panel.xml',
-            'ai_whatsapp_agent/static/src/components/ai_agent_panel/ai_agent_panel.scss',
-            'ai_whatsapp_agent/static/src/discuss_patch/discuss_patch.js',
-            'ai_whatsapp_agent/static/src/discuss_patch/channel_header_patch.xml',
-        ],
-    },
     'installable': True,
     'application': False,
     'license': 'LGPL-3',
