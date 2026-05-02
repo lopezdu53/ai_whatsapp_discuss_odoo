@@ -6,8 +6,7 @@
         <field name="name">Configuración Agente IA WhatsApp</field>
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
-        <field name="target">inline</field>
-        <field name="context">{'module': 'ai_whatsapp_agent'}</field>
+        <field name="target">current</field>
     </record>
 
     <!-- Vista de configuración standalone (sin heredar de base_setup) -->
