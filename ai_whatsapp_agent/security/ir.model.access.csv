@@ -1,4 +1,1 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_discuss_channel_ai_user,discuss.channel.ai.user,discuss.model_discuss_channel,base.group_user,1,1,0,0
-access_discuss_channel_ai_manager,discuss.channel.ai.manager,discuss.model_discuss_channel,base.group_system,1,1,1,1
-access_mail_message_ai_user,mail.message.ai.user,mail.model_mail_message,base.group_user,1,0,0,0
